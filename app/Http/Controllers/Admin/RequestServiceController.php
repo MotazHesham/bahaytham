@@ -12,6 +12,7 @@ use App\Models\RequestService;
 use App\Models\Service;
 use App\Models\User;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -120,7 +121,7 @@ class RequestServiceController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $requestService->id]);
         }
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.request-services.index');
     }
 
@@ -206,7 +207,7 @@ class RequestServiceController extends Controller
                 $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('certificates');
             }
         }
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.stupdateore.success_body'));
         return redirect()->route('admin.request-services.index');
     }
 
@@ -224,7 +225,7 @@ class RequestServiceController extends Controller
         abort_if(Gate::denies('request_service_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $requestService->delete();
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         return back();
     }
 

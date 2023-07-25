@@ -9,6 +9,7 @@ use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use App\Models\Service;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +45,7 @@ class ServicesController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $service->id]);
         }
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.services.index');
     }
 
@@ -69,7 +70,7 @@ class ServicesController extends Controller
         } elseif ($service->image) {
             $service->image->delete();
         }
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.update.success_body'));
         return redirect()->route('admin.services.index');
     }
 
@@ -85,7 +86,7 @@ class ServicesController extends Controller
         abort_if(Gate::denies('service_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $service->delete();
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         return back();
     }
 

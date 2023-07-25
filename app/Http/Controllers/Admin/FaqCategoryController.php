@@ -8,6 +8,7 @@ use App\Http\Requests\StoreFaqCategoryRequest;
 use App\Http\Requests\UpdateFaqCategoryRequest;
 use App\Models\FaqCategory;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +33,7 @@ class FaqCategoryController extends Controller
     public function store(StoreFaqCategoryRequest $request)
     {
         $faqCategory = FaqCategory::create($request->all());
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.faq-categories.index');
     }
 
@@ -46,7 +47,7 @@ class FaqCategoryController extends Controller
     public function update(UpdateFaqCategoryRequest $request, FaqCategory $faqCategory)
     {
         $faqCategory->update($request->all());
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.update.success_body'));
         return redirect()->route('admin.faq-categories.index');
     }
 
@@ -60,7 +61,7 @@ class FaqCategoryController extends Controller
     public function destroy(FaqCategory $faqCategory)
     {
         abort_if(Gate::denies('faq_category_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         $faqCategory->delete();
 
         return back();

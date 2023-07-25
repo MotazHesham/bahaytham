@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,7 +30,7 @@ class ClientsController extends Controller
     public function store(StoreClientRequest $request)
     {
         $client = Client::create($request->all());
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.clients.index');
     }
 
@@ -43,7 +44,7 @@ class ClientsController extends Controller
     public function update(UpdateClientRequest $request, Client $client)
     {
         $client->update($request->all());
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.update.success_body'));
         return redirect()->route('admin.clients.index');
     }
 
@@ -59,7 +60,7 @@ class ClientsController extends Controller
         abort_if(Gate::denies('client_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $client->delete();
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         return back();
     }
 

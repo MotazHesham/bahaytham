@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateConsultantRequest;
 use App\Models\Consultant;
 use App\Models\User;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,7 +95,7 @@ class ConsultantsController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $consultant->id]);
         }
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.consultants.index');
     }
 
@@ -123,7 +124,7 @@ class ConsultantsController extends Controller
         } elseif ($consultant->photo) {
             $consultant->photo->delete();
         }
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.update.success_body'));
         return redirect()->route('admin.consultants.index');
     }
 
@@ -141,7 +142,7 @@ class ConsultantsController extends Controller
         abort_if(Gate::denies('consultant_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $consultant->delete();
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         return back();
     }
 

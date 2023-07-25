@@ -9,6 +9,7 @@ use App\Http\Requests\StoreAboutuRequest;
 use App\Http\Requests\UpdateAboutuRequest;
 use App\Models\Aboutu;
 use Gate;
+use Alert;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +53,7 @@ class AboutusController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $aboutu->id]);
         }
-
+        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.aboutus.index');
     }
 
@@ -99,7 +100,7 @@ class AboutusController extends Controller
         } elseif ($aboutu->president_image) {
             $aboutu->president_image->delete();
         }
-
+        Alert::success(trans('flash.update.success_title'),trans('flash.update.success_body'));
         return redirect()->route('admin.aboutus.index');
     }
 
@@ -115,7 +116,7 @@ class AboutusController extends Controller
         abort_if(Gate::denies('aboutu_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $aboutu->delete();
-
+        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
         return back();
     }
 
