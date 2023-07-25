@@ -20,7 +20,7 @@
                             {{ trans('cruds.saidAboutUs.fields.id') }}
                         </th>
                         <td>
-                            {{ $saidAboutUs->id }}
+                            {{ $saidAboutUss->id }}
                         </td>
                     </tr>
                     <tr>
@@ -28,7 +28,7 @@
                             {{ trans('cruds.saidAboutUs.fields.user') }}
                         </th>
                         <td>
-                            {{ $saidAboutUs->user }}
+                            {{ $saidAboutUss->user }}
                         </td>
                     </tr>
                     <tr>
@@ -36,7 +36,7 @@
                             {{ trans('cruds.saidAboutUs.fields.text') }}
                         </th>
                         <td>
-                            {{ $saidAboutUs->text }}
+                            {{ $saidAboutUss->text }}
                         </td>
                     </tr>
                     <tr>
@@ -44,9 +44,9 @@
                             {{ trans('cruds.saidAboutUs.fields.photo') }}
                         </th>
                         <td>
-                            @if($saidAboutUs->photo)
-                                <a href="{{ $saidAboutUs->photo->getUrl() }}" target="_blank" style="display: inline-block">
-                                    <img src="{{ $saidAboutUs->photo->getUrl('thumb') }}">
+                            @if($saidAboutUss->photo)
+                                <a href="{{ $saidAboutUss->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $saidAboutUss->photo->getUrl('thumb') }}">
                                 </a>
                             @endif
                         </td>

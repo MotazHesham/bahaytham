@@ -31,7 +31,7 @@ class AboutusController extends Controller
     {
         abort_if(Gate::denies('aboutu_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.aboutus.create');
+        // return view('admin.aboutus.create');
     }
 
     public function store(StoreAboutuRequest $request)

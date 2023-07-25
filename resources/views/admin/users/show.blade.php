@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.phone_number') }}
+                        </th>
+                        <td>
+                            {{ $user->phone_number }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.email') }}
                         </th>
                         <td>

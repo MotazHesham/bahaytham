@@ -49,11 +49,11 @@ class SaidAboutUsController extends Controller
         return redirect()->route('admin.said-about-uss.index');
     }
 
-    public function edit(SaidAboutUs $saidAboutUs)
+    public function edit(SaidAboutUs $saidAboutUss)
     {
         abort_if(Gate::denies('said_about_us_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.saidAboutUss.edit', compact('saidAboutUs'));
+        return view('admin.saidAboutUss.edit', compact('saidAboutUss'));
     }
 
     public function update(UpdateSaidAboutUsRequest $request, SaidAboutUs $saidAboutUs)
@@ -74,11 +74,11 @@ class SaidAboutUsController extends Controller
         return redirect()->route('admin.said-about-uss.index');
     }
 
-    public function show(SaidAboutUs $saidAboutUs)
+    public function show(SaidAboutUs $saidAboutUss)
     {
         abort_if(Gate::denies('said_about_us_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.saidAboutUss.show', compact('saidAboutUs'));
+        return view('admin.saidAboutUss.show', compact('saidAboutUss'));
     }
 
     public function destroy(SaidAboutUs $saidAboutUs)

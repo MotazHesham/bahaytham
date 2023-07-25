@@ -9,6 +9,7 @@
     <div class="card-body">
         <form method="POST" action="{{ route("admin.users.store") }}" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="user_type" value="staff">
             <div class="form-group">
                 <label class="required" for="name">{{ trans('cruds.user.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>
@@ -28,6 +29,16 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.email_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="phone_number">{{ trans('cruds.user.fields.phone_number') }}</label>
+                <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" required>
+                @if($errors->has('phone_number'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('phone_number') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.phone_number_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>

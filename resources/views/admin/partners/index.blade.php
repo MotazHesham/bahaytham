@@ -43,12 +43,12 @@
                                 {{ $partner->id ?? '' }}
                             </td>
                             <td>
-                                @if($partner->image)
-                                    <a href="{{ $partner->image->getUrl() }}" target="_blank">
-                                        {{ trans('global.view_file') }}
+                                @if ($partner->image)
+                                    <a href="{{ $partner->image->getUrl() }}" target="_blank"
+                                        style="display: inline-block">
+                                        <img src="{{ $partner->image->getUrl('thumb') }}">
                                     </a>
                                 @endif
-                            </td>
                             <td>
                                 @can('partner_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.partners.show', $partner->id) }}">

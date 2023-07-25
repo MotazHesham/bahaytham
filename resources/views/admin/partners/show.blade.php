@@ -29,8 +29,8 @@
                         </th>
                         <td>
                             @if($partner->image)
-                                <a href="{{ $partner->image->getUrl() }}" target="_blank">
-                                    {{ trans('global.view_file') }}
+                                <a href="{{ $partner->image->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $partner->image->getUrl('thumb') }}">
                                 </a>
                             @endif
                         </td>

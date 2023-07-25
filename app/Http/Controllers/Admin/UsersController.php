@@ -7,10 +7,10 @@ use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
-use App\Models\User;
-use Gate;
-use Alert;
+use App\Models\User;  
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,7 +21,7 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = User::with(['roles'])->select(sprintf('%s.*', (new User)->table));
+            $query = User::with(['roles'])->where('user_type','staff')->select(sprintf('%s.*', (new User)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -84,6 +84,9 @@ class UsersController extends Controller
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
+        
+        // toast(trans('flash.store.success_title'),'success');
+
         Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
         return redirect()->route('admin.users.index');
     }

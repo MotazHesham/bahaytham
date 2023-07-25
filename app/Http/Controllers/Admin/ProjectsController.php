@@ -19,6 +19,16 @@ class ProjectsController extends Controller
 {
     use MediaUploadingTrait;
 
+    
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $project = Project::findOrFail($request->id);
+        $project->$type = $request->status; 
+        $project->save();
+        return 1;
+    }
+
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('project_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -66,7 +76,11 @@ class ProjectsController extends Controller
                 return '';
             });
             $table->editColumn('published', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->published ? 'checked' : null) . '>';
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .'>
+                    <span class="c-switch-slider"></span>
+                </label>';
             });
 
             $table->rawColumns(['actions', 'placeholder', 'main_image', 'published']);

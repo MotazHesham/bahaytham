@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {
@@ -41,12 +44,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Projects
     Route::delete('projects/destroy', 'ProjectsController@massDestroy')->name('projects.massDestroy');
+    Route::post('projects/update_statuses', 'ProjectsController@update_statuses')->name('projects.update_statuses');
     Route::post('projects/media', 'ProjectsController@storeMedia')->name('projects.storeMedia');
     Route::post('projects/ckmedia', 'ProjectsController@storeCKEditorImages')->name('projects.storeCKEditorImages');
     Route::resource('projects', 'ProjectsController');
 
     // Sliders
     Route::delete('sliders/destroy', 'SlidersController@massDestroy')->name('sliders.massDestroy');
+    Route::post('sliders/update_statuses', 'SlidersController@update_statuses')->name('sliders.update_statuses');
     Route::post('sliders/media', 'SlidersController@storeMedia')->name('sliders.storeMedia');
     Route::post('sliders/ckmedia', 'SlidersController@storeCKEditorImages')->name('sliders.storeCKEditorImages');
     Route::resource('sliders', 'SlidersController');
