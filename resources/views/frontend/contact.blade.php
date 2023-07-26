@@ -24,37 +24,38 @@
                     <div class="info_contactt">
                         <li>
                             <i class="fa-solid fa-mobile"></i>
-                            <p>+966555339575 +966551724152</p>
+                            <p>{{ $about_us->phone_number }}</p>
                         </li>
 
                         <li>
                             <i class="fa-solid fa-envelope"></i>
-                            <p>jeddah.fs@bahytham.com</p>
+                            <p>{{ $about_us->email }}</p>
                         </li>
 
                         <li>
                             <i class="fa-solid fa-location-dot"></i>
-                            <p>No.303 البغدادية الغربية‎ جدة 22234‎ Saudi Arabia</p>
+                            <p>{{ $about_us->address }}</p>
                         </li>
                     </div>
                 </div>
 
                 <div class="col-7">
                     <div class="form_contact">
-                        <form>
-                            <label for="">الاسم الاول
-                                <input type="text" placeholder="الاسم الاول">
+                        <form action="{{ route('frontend.contact.store') }}" method="POST">
+                            @csrf
+                            <label for="name">الاسم الاول
+                                <input type="text" id="name" name="name" placeholder="الاسم الاول">
                             </label>
 
-                            <label for=""> البريد الالكتروني
-                                <input type="text" placeholder=" البريد الالكتروني">
+                            <label for="email"> البريد الالكتروني
+                                <input type="email" id="email" name="email" placeholder=" البريد الالكتروني">
                             </label>
 
-                            <label for=""> الرسالة
-                                <textarea placeholder="الرسالة"></textarea>
+                            <label for="message"> الرسالة
+                                <textarea name="message" id="message" name="message" placeholder="الرسالة"></textarea>
                             </label>
 
-                            <button>ارسال الان</button>
+                            <button type="submit">ارسال الان</button>
                         </form>
                     </div>
                 </div>

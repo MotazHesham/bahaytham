@@ -22,20 +22,22 @@
         <div class="container">
             <div class="row">
                 <div class="form_contact form_order">
-                    <form>
-                        <label for="">الاسم الاول
-                            <input type="text" placeholder="الاسم الاول">
+                    <form action="         " method="POST">
+                        @csrf
+                        <label for="name">الاسم الاول
+                            <input type="text" name='name' placeholder="الاسم الاول">
                         </label>
 
-                        <label for=""> البريد الالكتروني
-                            <input type="email" placeholder=" البريد الالكتروني">
-                        </label>
-                        <label for="">    كلمة المرور
-                            <input type="password" placeholder=" كلمة المرور">
+                        <label for="email"> البريد الالكتروني
+                            <input type="email" name='email' placeholder=" البريد الالكتروني">
                         </label>
 
-                        <label for=""> الهاتف
-                            <input type="text" placeholder="  الهاتف">
+                        <label for="password">    كلمة المرور
+                            <input type="password" name='password' placeholder=" كلمة المرور">
+                        </label>
+
+                         <label for="phone"> الهاتف
+                            <input type="text" name='' placeholder="الهاتف">
                         </label>
 
                         <label for=""> نوع الخدمة
@@ -48,7 +50,7 @@
                         </label>
 
 
-                        <button>طلب الان</button>
+                        <button type="submit">طلب الان</button>
                     </form>
                 </div>
             </div>

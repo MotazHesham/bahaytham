@@ -7,7 +7,7 @@ use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
-use App\Models\User;  
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -84,7 +84,7 @@ class UsersController extends Controller
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
-        
+
         // toast(trans('flash.store.success_title'),'success');
 
         Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));

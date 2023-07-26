@@ -1,40 +1,39 @@
 @extends('layouts.frontend')
 
+@php
+    $about_us = \App\Models\Aboutu::first();
+@endphp
+
 @section('content')
     <section class="about" id="about">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="img_about img_about2">
-                        <img src="{{ asset('frontend/images/industry-realestate.jpg') }}" alt="">
+                        <img src="{{ $about_us->aboutus_image ? $about_us->aboutus_image->getUrl() : '' }}" alt="">
                     </div>
                 </div>
 
                 <div class="col-12">
                     <div class="text_about">
-                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى،
-                            حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها
-                            التطبيق.هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص
-                            العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف
-                            التى يولدها التطبيق.
-                        </p>
+                        <p>{{ $about_us->president_description }}</p>
 
                         <div class="col-6">
                             <div class="goald">
                                 <img src="{{ asset('frontend/images/goal.png') }}" alt="">
                                 <h3>الاهداف</h3>
-                                <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص
-                                    العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد
-                                    الحروف التى ي</p>
+                                <p>
+                                    <?php echo nl2br($about_us->mission);  ?>
+                                </p>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="vission">
                                 <img src="{{ asset('frontend/images/vision.png') }}" alt="">
                                 <h3>الرؤية</h3>
-                                <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص
-                                    العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد
-                                    الحروف التى ي</p>
+                                <p>
+                                    <?php echo nl2br($about_us->vision);  ?>
+                                </p>
                             </div>
                         </div>
 

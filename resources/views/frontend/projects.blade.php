@@ -21,60 +21,16 @@
     <section class="projects_single">
         <div class="container">
             <div class="row">
+                @foreach ($projects as $project)
                 <div class="col-4">
                     <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
+                        <img src="{{ $project->main_image ? $project->main_image->getUrl() : '' }}" alt="">
+                        <h3>{{ $project->name }}</h3>
+                        <h3>{{ $project->owner }}</h3>
+                        <p>{{ $project->address ?? '' }}</p>
+                        <a href="{{ route('frontend.project') }}">التفاصيل</a>
                     </div>
-                </div>
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ asset('frontend/images/project-covid19.jpg') }}" alt="">
-                        <h3>BLUE BAY MALL</h3>
-                        <h3>مركز بلو باي التجاري</h3>
-                        <p>No.303 البغدادية الغربية جدة 22234</p>
-                        <a href="#">التفاصيل</a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>

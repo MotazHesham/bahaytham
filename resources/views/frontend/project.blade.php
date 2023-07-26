@@ -20,8 +20,8 @@
     </div><!-- End slider -->
     <section class="single">
         <div class="container">
-            <h3 class="name_proj">اسم المشروع</h3>
-            <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد </p>
+            <h3 class="name_proj">{{ $project->name }}</h3>
+            <p><?php echo nl2br($project->description);  ?> </p>
 
             <div class="slider_project">
                 <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
@@ -99,28 +99,21 @@
             <div class="row">
                 <div class="col-3">
                     <div class="img_about">
-                        <img src="{{ asset('frontend/images/about.jpg') }}" alt="">
+                        <img src="{{ $project->main_image ? $project->main_image->getUrl() : '' }} " alt="">
                     </div>
                 </div>
 
                 <div class="col-9">
                     <div class="text_about">
                         <ul class="list_proj">
-                            <li>المالك: شركة جنوب الوادي للأسمنت </li>
-                            <li> العميل : اسم العميل</li>
-                            <li>الموقع: المملكة العربية السعودية</li>
-                            <li> مدة التنفيذ : 3 شهور</li>
-                            <li>نطاق العمل: الأعمال المدنية</li>
+                            <li>المالك: {{ $project->owner }}</li>
+                            <li> العميل: {{ $project->client }}</li>
+                            <li>الموقع: {{ $project->address }}</li>
+                            <li> مدة التنفيذ : {{ $project->duration }}</li>
+                            <li>نطاق العمل: {{ $project->working_area }}</li>
                         </ul>
-                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى،
-                            حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها
-                            التطبيق.
-                            إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص
-                            لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث
-                            يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.لمصممي المواقع على وجه
-                            الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.
-                            على صورة حقيقية لتصميم الموقع.لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان
-                            أن يطلع على صورة حقيقية لتصميم الموقع.
+                        <p>
+                            <?php echo nl2br($project->description);  ?>
                         </p>
                     </div>
                 </div>
