@@ -13,8 +13,12 @@ Route::get('/home', function () {
 });
 
 Auth::routes();
+// Comments
+Route::post('comments/media', 'CommentsController@storeMedia')->name('comments.storeMedia');
+Route::post('comments/ckmedia', 'CommentsController@storeCKEditorImages')->name('comments.storeCKEditorImages');
+Route::post('comments/store','CommentsController@store')->name('comments.store');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () {
     Route::get('/', 'HomeController@index')->name('home');
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
@@ -83,6 +87,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('services', 'ServicesController');
 
     // Request Service
+    Route::post('request-services/update_stages', 'RequestServiceController@update_stages')->name('request-services.update_stages');
+    Route::get('request-services/update_status/{id}/{status}', 'RequestServiceController@update_status')->name('request-services.update_status');
     Route::delete('request-services/destroy', 'RequestServiceController@massDestroy')->name('request-services.massDestroy');
     Route::post('request-services/media', 'RequestServiceController@storeMedia')->name('request-services.storeMedia');
     Route::post('request-services/ckmedia', 'RequestServiceController@storeCKEditorImages')->name('request-services.storeCKEditorImages');

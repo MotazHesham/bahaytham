@@ -25,71 +25,21 @@
 
             <div class="slider_project">
                 <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
+                    <div class="swiper-wrapper"> 
+                        @foreach($project->images as $key => $media) 
+                            <div class="swiper-slide">
+                                <img src="{{ $media->getUrl() }}" />
+                            </div> 
+                        @endforeach
                     </div>
                 </div>
                 <div thumbsSlider="" class="swiper mySwiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/images/real-estate1.jpg') }}" />
-                        </div>
+                        @foreach($project->images as $key => $media) 
+                            <div class="swiper-slide">
+                                <img src="{{ $media->getUrl() }}" />
+                            </div> 
+                        @endforeach 
                     </div>
                 </div>
 

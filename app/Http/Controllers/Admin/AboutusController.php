@@ -66,7 +66,10 @@ class AboutusController extends Controller
 
     public function update(UpdateAboutuRequest $request, Aboutu $aboutu)
     {
-        $aboutu->update($request->all());
+        $validated_request = $request->all();
+
+        $validated_request['keywords_seo'] = implode('|',$request->keywords_seo);   
+        $aboutu->update($validated_request);
 
         if ($request->input('logo', false)) {
             if (! $aboutu->logo || $request->input('logo') !== $aboutu->logo->file_name) {

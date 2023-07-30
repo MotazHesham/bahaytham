@@ -22,13 +22,14 @@
         <div class="container">
             <div class="row">
                 @foreach ($projects as $project)
-                <div class="col-4">
-                    <div class="serv_sin">
-                        <img src="{{ $project->main_image ? $project->main_image->getUrl() : '' }}" alt="">
-                        <h3>{{ $project->name }}</h3>
-                        <h3>{{ $project->owner }}</h3>
-                        <p>{{ $project->address ?? '' }}</p>
-                        <a href="{{ route('frontend.project') }}">التفاصيل</a>
+                    <div class="col-4">
+                        <div class="serv_sin">
+                            <img src="{{ $project->main_image ? $project->main_image->getUrl('preview2') : '' }}" alt="">
+                            <h3>{{ $project->name }}</h3>
+                            <h3>{{ $project->owner }}</h3>
+                            <p>{{ $project->address ?? '' }}</p>
+                            <a href="{{ route('frontend.project',$project->id) }}">التفاصيل</a>
+                        </div>
                     </div>
                 @endforeach
             </div>

@@ -7,13 +7,13 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyRequestServiceRequest;
 use App\Http\Requests\StoreRequestServiceRequest;
 use App\Http\Requests\UpdateRequestServiceRequest;
-use App\Models\Consultant;
 use App\Models\RequestService;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\UserAlert;
 use Gate;
-use Alert;
 use Illuminate\Http\Request;
+use Laravel\Ui\Presets\React;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,12 +22,23 @@ class RequestServiceController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function update_status($id,$status){
+        $requestService = RequestService::findOrFail($id);
+        if($status == 'accept'){
+            $requestService->stages = 'contract';
+        }
+        $requestService->status = $status;
+        $requestService->save();
+        alert('تم بنجاح');
+        return redirect()->route('admin.request-services.index');
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('request_service_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = RequestService::with(['user', 'service', 'consultant'])->select(sprintf('%s.*', (new RequestService)->table));
+            $query = RequestService::with(['user', 'service'])->select(sprintf('%s.*', (new RequestService)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -39,7 +50,7 @@ class RequestServiceController extends Controller
                 $deleteGate    = 'request_service_delete';
                 $crudRoutePart = 'request-services';
 
-                return view('partials.datatablesActions', compact(
+                return view('admin.requestServices.datatablesActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
@@ -51,12 +62,6 @@ class RequestServiceController extends Controller
             $table->editColumn('id', function ($row) {
                 return $row->id ? $row->id : '';
             });
-            $table->editColumn('contract', function ($row) {
-                return $row->contract ? '<a href="' . $row->contract->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
-            });
-            $table->editColumn('stages', function ($row) {
-                return $row->stages ? RequestService::STAGES_SELECT[$row->stages] : '';
-            });
             $table->addColumn('user_name', function ($row) {
                 return $row->user ? $row->user->name : '';
             });
@@ -65,15 +70,35 @@ class RequestServiceController extends Controller
                 return $row->service ? $row->service->name : '';
             });
 
-            $table->addColumn('consultant_description', function ($row) {
-                return $row->consultant ? $row->consultant->description : '';
+            $table->editColumn('contract', function ($row) {
+                if($row->contract){ 
+                    $contract = '<a href="' . $row->contract->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>';
+                }else{
+                    if($row->status == 'accept'){
+                        $contract = '<a class="btn btn-xs btn-info" href="'. route("admin.request-services.show",$row->id) .'"> أرسال العقد </a>  ';
+                    }else{
+                        $contract = '';
+                    }
+                }
+                return $contract;
+            });
+            $table->editColumn('contract_accept', function ($row) {
+                if($row->status != 'accept'){
+                    $status = '';
+                }elseif($row->contract_accept){
+                    $status = '<i class="far fa-check-circle " style="font-size:20px;color:green"></i>';
+                }elseif($row->contract){ 
+                    $status = 'في أنتظار الموافقة';
+                }else{ 
+                    $status = '';
+                }
+                return  $status;
+            });
+            $table->editColumn('status', function ($row) {
+                return $row->status ? RequestService::STATUS_SELECT[$row->status] : '';
             });
 
-            $table->editColumn('consultant.description', function ($row) {
-                return $row->consultant ? (is_string($row->consultant) ? $row->consultant : $row->consultant->description) : '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'contract', 'user', 'service', 'consultant']);
+            $table->rawColumns(['actions', 'placeholder', 'user', 'service', 'contract', 'contract_accept']);
 
             return $table->make(true);
         }
@@ -89,9 +114,7 @@ class RequestServiceController extends Controller
 
         $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $consultants = Consultant::pluck('description', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.requestServices.create', compact('consultants', 'services', 'users'));
+        return view('admin.requestServices.create', compact('services', 'users'));
     }
 
     public function store(StoreRequestServiceRequest $request)
@@ -102,120 +125,92 @@ class RequestServiceController extends Controller
             $requestService->addMedia(storage_path('tmp/uploads/' . basename($request->input('contract'))))->toMediaCollection('contract');
         }
 
-        if ($request->input('cost_1_file', false)) {
-            $requestService->addMedia(storage_path('tmp/uploads/' . basename($request->input('cost_1_file'))))->toMediaCollection('cost_1_file');
-        }
-
-        foreach ($request->input('finished_files', []) as $file) {
-            $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('finished_files');
-        }
-
-        foreach ($request->input('finished_files_from_admin', []) as $file) {
-            $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('finished_files_from_admin');
-        }
-
-        foreach ($request->input('certificates', []) as $file) {
-            $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('certificates');
-        }
-
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $requestService->id]);
         }
-        Alert::success(trans('flash.store.success_title'),trans('flash.store.success_body'));
+
         return redirect()->route('admin.request-services.index');
     }
 
     public function edit(RequestService $requestService)
-    {
-        abort_if(Gate::denies('request_service_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    { 
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $requestService->load('user', 'service');
 
-        $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $consultants = Consultant::pluck('description', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $requestService->load('user', 'service', 'consultant');
-
-        return view('admin.requestServices.edit', compact('consultants', 'requestService', 'services', 'users'));
+        return view('admin.requestServices.edit', compact('requestService'));
     }
 
     public function update(UpdateRequestServiceRequest $request, RequestService $requestService)
     {
         $requestService->update($request->all());
 
+        $alert_body = '';
         if ($request->input('contract', false)) {
-            if (! $requestService->contract || $request->input('contract') !== $requestService->contract->file_name) {
+            if (!$requestService->contract || $request->input('contract') !== $requestService->contract->file_name) {
                 if ($requestService->contract) {
                     $requestService->contract->delete();
                 }
                 $requestService->addMedia(storage_path('tmp/uploads/' . basename($request->input('contract'))))->toMediaCollection('contract');
             }
+            $alert_body = 'تم أرسال العقد للعميل بنجاح وفي أنتظار قبول الشروط والأحكام';
+            $userAlert = UserAlert::create([
+                'alert_text' => 'تم أرسال العقد للخدمة المطلوبة رقم #'.$requestService->id.' وفي أنتطار القبول وأرسال الدفعة الأولي',
+                'alert_link' => route('client.request-services.show',$requestService->id),
+            ]);
+            $userAlert->users()->sync([$requestService->user_id]);
         } elseif ($requestService->contract) {
             $requestService->contract->delete();
         }
 
-        if ($request->input('cost_1_file', false)) {
-            if (! $requestService->cost_1_file || $request->input('cost_1_file') !== $requestService->cost_1_file->file_name) {
-                if ($requestService->cost_1_file) {
-                    $requestService->cost_1_file->delete();
-                }
-                $requestService->addMedia(storage_path('tmp/uploads/' . basename($request->input('cost_1_file'))))->toMediaCollection('cost_1_file');
-            }
-        } elseif ($requestService->cost_1_file) {
-            $requestService->cost_1_file->delete();
-        }
+        alert('تم بنجاح',$alert_body,'success'); 
+        return redirect()->route('admin.request-services.show',$requestService->id);
+    }
 
-        if (count($requestService->finished_files) > 0) {
-            foreach ($requestService->finished_files as $media) {
-                if (! in_array($media->file_name, $request->input('finished_files', []))) {
-                    $media->delete();
-                }
+    public function update_stages(Request $request)
+    {
+        $requestService = RequestService::findOrFail($request->id); 
+        $alert_body = ''; 
+        if($request->stages == 'working'){
+            $requestService->update($request->all()); 
+            $alert_body = 'تم التحويل إلي المستشار لبدء التنفيذ';
+            alert('تم بنجاح',$alert_body,'success'); 
+        }elseif($request->stages == 'delivered'){
+            if(!$request->has('finished_files_from_admin')){ 
+                alert('الملفات النهائية مطلوبة','','error');
+                return redirect()->route('admin.request-services.show',$requestService->id);
             }
-        }
-        $media = $requestService->finished_files->pluck('file_name')->toArray();
-        foreach ($request->input('finished_files', []) as $file) {
-            if (count($media) === 0 || ! in_array($file, $media)) {
-                $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('finished_files');
-            }
-        }
 
-        if (count($requestService->finished_files_from_admin) > 0) {
-            foreach ($requestService->finished_files_from_admin as $media) {
-                if (! in_array($media->file_name, $request->input('finished_files_from_admin', []))) {
-                    $media->delete();
-                }
-            }
-        }
-        $media = $requestService->finished_files_from_admin->pluck('file_name')->toArray();
-        foreach ($request->input('finished_files_from_admin', []) as $file) {
-            if (count($media) === 0 || ! in_array($file, $media)) {
+            $requestService->update($request->all()); 
+            
+            foreach ($request->input('finished_files_from_admin', []) as $file) {
                 $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('finished_files_from_admin');
             }
-        }
-
-        if (count($requestService->certificates) > 0) {
-            foreach ($requestService->certificates as $media) {
-                if (! in_array($media->file_name, $request->input('certificates', []))) {
-                    $media->delete();
-                }
+            $alert_body = 'تم أرسال الملفات النهائية للعميل';
+            alert('تم بنجاح',$alert_body,'success'); 
+        }elseif($request->stages == 'done'){
+            if(!$request->has('certificates')){ 
+                alert('شهادة الأنجاز مطلوبة','','error');
+                return redirect()->route('admin.request-services.show',$requestService->id);
             }
-        }
-        $media = $requestService->certificates->pluck('file_name')->toArray();
-        foreach ($request->input('certificates', []) as $file) {
-            if (count($media) === 0 || ! in_array($file, $media)) {
+
+            $requestService->update($request->all()); 
+            
+            foreach ($request->input('certificates', []) as $file) {
                 $requestService->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('certificates');
             }
+            $alert_body = 'تم أرسال شهادة الأنجاز للعميل';
+            alert('تم بنجاح',$alert_body,'success'); 
+        }else{
+            alert('error','','error');
         }
-        Alert::success(trans('flash.update.success_title'),trans('flash.stupdateore.success_body'));
-        return redirect()->route('admin.request-services.index');
+        return redirect()->route('admin.request-services.show',$requestService->id);
     }
 
     public function show(RequestService $requestService)
     {
         abort_if(Gate::denies('request_service_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $requestService->load('user', 'service', 'consultant');
+        $requestService->load('user', 'service');
 
         return view('admin.requestServices.show', compact('requestService'));
     }
@@ -225,7 +220,7 @@ class RequestServiceController extends Controller
         abort_if(Gate::denies('request_service_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $requestService->delete();
-        Alert::success(trans('flash.destroy.success_title'),trans('flash.destroy.success_body'));
+
         return back();
     }
 

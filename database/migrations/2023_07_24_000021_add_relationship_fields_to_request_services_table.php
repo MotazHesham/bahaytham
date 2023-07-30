@@ -14,7 +14,7 @@ class AddRelationshipFieldsToRequestServicesTable extends Migration
             $table->unsignedBigInteger('service_id')->nullable();
             $table->foreign('service_id', 'service_fk_8787432')->references('id')->on('services');
             $table->unsignedBigInteger('consultant_id')->nullable();
-            $table->foreign('consultant_id', 'consultant_fk_8787446')->references('id')->on('consultants');
+            $table->foreign('consultant_id', 'consultant_fk_8787446')->references('id')->on('users');
         });
     }
 }

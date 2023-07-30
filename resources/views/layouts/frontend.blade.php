@@ -116,6 +116,8 @@
 
 
 
+    @include('sweetalert::alert')
+    
     <script src="{{ asset('frontend/js/jquery-3.0.0.min.js') }}"></script>
     <!--<script src="js/jquery-migrate-3.0.0.min.js"></script>-->
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>

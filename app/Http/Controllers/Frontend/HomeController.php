@@ -40,21 +40,15 @@ class HomeController extends Controller
     public function store(StoreContactRequest $request)
     {
         $contact = Contact::create($request->all());
-        // toast(trans('flash.store.success_title'),'success');
+        alert('تم أرسال رسالتك وسيتم التواصل معك','','success');
         return redirect()->route('frontend.contact');
     }
 
-    public function request_service(){
+    public function request_service(){ 
         return view('frontend.request_service');
-    }
-
-    // public function store_request_service(StoreRequestServiceRequest $request){
-    //     $request_service = RequestService::create($request->all());
-    //     return redirect()->route('frontend.request_service');
-    // }
-
-    public function project(){
-        $project = Project::first();
+    } 
+    public function project($id){
+        $project = Project::findOrFail($id);
         return view('frontend.project',compact('project'));
     }
 
@@ -63,9 +57,10 @@ class HomeController extends Controller
         return view('frontend.projects',compact('projects'));
     }
 
-    public function service(){
+    public function service($id){
+        $service = Service::findOrFail($id);
         $services = Service::all();
-        return view('frontend.service');
+        return view('frontend.service',compact('service','services'));
     }
 
     public function services(){

@@ -30,6 +30,7 @@ class RequestService extends Model implements HasMedia
     protected $appends = [
         'contract',
         'cost_1_file',
+        'cost_2_file',
         'finished_files',
         'finished_files_from_admin',
         'certificates',
@@ -51,16 +52,18 @@ class RequestService extends Model implements HasMedia
     ];
 
     protected $fillable = [
+        'user_id',
+        'service_id',
+        'consultant_id',
         'contract_accept',
         'status',
         'stages',
+        'cost_1',
+        'cost_2',
         'start_date',
         'end_date',
         'done_time',
         'duration_to_edit',
-        'user_id',
-        'service_id',
-        'consultant_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -87,6 +90,11 @@ class RequestService extends Model implements HasMedia
         return $this->getMedia('cost_1_file')->last();
     }
 
+    public function getCost2FileAttribute()
+    {
+        return $this->getMedia('cost_2_file')->last();
+    }
+    
     public function getFinishedFilesAttribute()
     {
         return $this->getMedia('finished_files');
@@ -144,6 +152,6 @@ class RequestService extends Model implements HasMedia
 
     public function consultant()
     {
-        return $this->belongsTo(Consultant::class, 'consultant_id');
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 }

@@ -12,8 +12,8 @@ class CreateAboutusTable extends Migration
             $table->bigIncrements('id');
             $table->string('site_name');
             $table->string('description')->nullable();
-            $table->string('mission')->nullable();
-            $table->string('vision')->nullable();
+            $table->text('mission')->nullable();
+            $table->text('vision')->nullable();
             $table->longText('president_description')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();

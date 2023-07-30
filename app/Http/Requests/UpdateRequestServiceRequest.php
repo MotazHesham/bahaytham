@@ -17,54 +17,22 @@ class UpdateRequestServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'finished_files' => [
-                'array',
-                'required',
+            'contract' => [
+                'required', 
             ],
-            'finished_files.*' => [
-                'required',
+            'cost_1' => [
+                'required', 
             ],
-            'finished_files_from_admin' => [
-                'array',
-                'required',
-            ],
-            'finished_files_from_admin.*' => [
-                'required',
-            ],
-            'certificates' => [
-                'array',
-                'required',
-            ],
-            'certificates.*' => [
-                'required',
+            'cost_2' => [
+                'required', 
             ],
             'start_date' => [
+                'required', 
                 'date_format:' . config('panel.date_format'),
-                'nullable',
             ],
             'end_date' => [
+                'required', 
                 'date_format:' . config('panel.date_format'),
-                'nullable',
-            ],
-            'done_time' => [
-                'date_format:' . config('panel.date_format') . ' ' . config('panel.time_format'),
-                'nullable',
-            ],
-            'duration_to_edit' => [
-                'string',
-                'nullable',
-            ],
-            'user_id' => [
-                'required',
-                'integer',
-            ],
-            'service_id' => [
-                'required',
-                'integer',
-            ],
-            'consultant_id' => [
-                'required',
-                'integer',
             ],
         ];
     }

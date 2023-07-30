@@ -10,7 +10,7 @@
             <div class="">
                 <div class="text-center">
                     <div class="img_bg2">
-                         <img src="{{ asset('frontend/images/slider.jpg') }}"  alt="">
+                        <img src="{{ asset('frontend/images/slider.jpg') }}"  alt="">
                     </div>
 
                     <div class="details_slider">
@@ -34,7 +34,7 @@
 
                         <div class="hover_serv">
                             <div>
-                                <?php echo nl2br($service->description);  ?>
+                                <a href="{{ route('frontend.service',$service->id) }}">التفاصيل</a>
                             </div>
                         </div>
                     </div>

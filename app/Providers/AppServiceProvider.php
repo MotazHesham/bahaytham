@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
         // Model::preventLazyLoading --------------
         // important Note (disable it on production) How ?
         // - app()->isProduction() it refers to .env file to (APP_ENV)
-        Model::preventLazyLoading(!app()->isProduction()); // while development it show error if you try to lazy loading query
+        // Model::preventLazyLoading(!app()->isProduction()); // while development it show error if you try to lazy loading query
     }
 }
